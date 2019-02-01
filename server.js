@@ -48,27 +48,27 @@ io.on('connection', function (socket) {
         }
     });
 
-    socket.on('note', function (noteInfo) {
-        if (!sockets.has(socketId)) {
+    socket.on('note', function (isOn, noteInfo) {
+        if (!sockets.has(socket.id)) {
             socket.emit('error', "You're not in a server");
         } else {
             let roomId = sockets.get(socket.id);
             rooms.get(roomId).forEach((user, id) => {
                 if (id !== socket.id) {
-                    user.socket.emit('note', noteInfo);
+                    user.socket.emit('note', isOn, noteInfo, socket.id);
                 }
             });
         }
     });
 
     socket.on('instrument', function (instrumentInfo) {
-        if (!sockets.has(socketId)) {
+        if (!sockets.has(socket.id)) {
             socket.emit('error', 403, "You're not in a server");
         } else {
             let roomId = sockets.get(socket.id);
             rooms.get(roomId).forEach((user, id) => {
                 if (id !== socket.id) {
-                    user.socket.emit('instrument', instrumentInfo);
+                    user.socket.emit('instrument', instrumentInfo, socket.id);
                 }
             });
         }

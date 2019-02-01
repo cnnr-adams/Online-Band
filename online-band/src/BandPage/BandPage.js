@@ -5,13 +5,16 @@ import OtherPiano from './OtherPiano';
 const STYLE = {
     spacingContainer: {
         display: 'flex',
-        'justify-content': 'space-between'
+        justifyContent: 'space-between'
     },
     bandPage: {
         backgroundColor: '#00003b',
         position: 'fixed',
         height: '100%',
         width: '100%'
+    },
+    text: {
+        color: 'white'
     }
 }
 export default class extends Component {
@@ -25,20 +28,33 @@ export default class extends Component {
         });
         this.props.backend.onLeaveUsers((leaveUser) => {
             this.setState({ length: this.props.backend.users.size });
-        })
+        });
+    }
+
+    onNote = (isOn, note) => {
+        this.props.backend.sendNote(isOn, note);
+    }
+
+    onInstrument = (instrument) => {
+        this.props.backend.sendInstrument(instrument);
+    }
+
+    getPianos() {
+        let otherPianos = [];
+        console.log(this.props.backend.users);
+        this.props.backend.users.forEach((user, id) => {
+
+            otherPianos.push(<li key={id}><OtherPiano onNote={this.props.backend.onNote} id={id} onInstrument={this.props.backend.onInstrument} /></li>);
+        });
+        console.log(otherPianos);
+        return <div style={STYLE.spacingContainer}>{otherPianos}</div>
     }
     render() {
-        let otherPianos = <div style={STYLE.spacingContainer}>;
-        for (let user in this.props.backend.users) {
-                otherPianos += <OtherPiano />
-            }
-            otherPianos += </div>;
         return (
             <div style={STYLE.bandPage}>
-                Users connected: {this.state.length} at {this.state.lobbyId}
-                <Piano />
-
-                {otherPianos}
+                <div style={STYLE.text}>Users connected: {this.state.length} at {this.state.lobbyId}</div>
+                <Piano onNote={this.onNote} onInstrument={this.onInstrument} />
+                {this.getPianos()}
             </div>
 
         )
