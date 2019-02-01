@@ -96,8 +96,8 @@ function leave(socketId) {
     sockets.delete(socketId);
 }
 
-http.listen(3000, function () {
-    console.log("Listening to your every movement on 3000");
+http.listen(3001, function () {
+    console.log("Listening to your every movement on 3001");
 })
 
 class User {
