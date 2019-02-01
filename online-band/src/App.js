@@ -3,27 +3,31 @@ import logo from './logo.svg';
 import './App.css';
 import BandPage from './BandPage/BandPage';
 import HomePage from './HomePage/HomePage';
-class App extends Component {
+import Backend from './interface';
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { connected: false };
+    this.backend = new Backend(this.onConnect, this.onDisconnect);
+  }
+  componentDidMount() {
+
+  }
+  onConnect = (lobbyId) => {
+    this.setState({ connected: true, lobbyId: lobbyId });
+  }
+  onDisconnect = () => {
+    this.setState({ connected: false });
+  }
+
   render() {
+    if (!this.state.connected) {
+      return (
+        <HomePage host={this.backend.host} join={this.backend.join} />
+      )
+    }
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <BandPage lobbyId={this.state.lobbyId} backend={this.backend} />
     );
   }
 }
-
-export default App;
