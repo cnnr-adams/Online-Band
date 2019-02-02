@@ -5,7 +5,8 @@ export default class Backend {
         this.onConnected = onConnected;
         this.onDisconnected = onDisconnected;
         this.connected = false;
-        this.socket = io("localhost:3001");
+        console.log(window.location.hostname);
+        this.socket = io(window.location.hostname + ":3001");
         this.socket.on('connection', () => {
             console.log('connected!');
         })
