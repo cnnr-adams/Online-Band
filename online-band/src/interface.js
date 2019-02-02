@@ -41,6 +41,15 @@ export default class Backend {
         });
     }
 
+    sendVolume(volume) {
+        this.socket.emit('volume', volume);
+    }
+
+    onVolume = (callback) => {
+        this.socket.on('volume', (volume, id) => {
+            callback(volume, id);
+        });
+    }
     sendInstrument(instrument) {
         this.socket.emit('instrument', instrument)
     }

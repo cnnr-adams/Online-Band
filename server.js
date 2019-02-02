@@ -74,6 +74,19 @@ io.on('connection', function (socket) {
         }
     });
 
+    socket.on('volume', function (volume) {
+        if (!sockets.has(socket.id)) {
+            socket.emit('error', 403, "You're not in a server");
+        } else {
+            let roomId = sockets.get(socket.id);
+            rooms.get(roomId).forEach((user, id) => {
+                if (id !== socket.id) {
+                    user.socket.emit('instrument', volume, socket.id);
+                }
+            });
+        }
+    });
+
     socket.on('leave', function () {
         leave(socket.id);
     });

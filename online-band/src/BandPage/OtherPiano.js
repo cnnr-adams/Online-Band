@@ -44,6 +44,7 @@ export default class extends Component {
         super(props);
         this.midiNotes = [];
         this.state = {
+            volume: 10 / 50 - 0.025,
             selectedInstrument: 192
             , status: '?'
         };
@@ -62,6 +63,12 @@ export default class extends Component {
                 this.selectInstrument(instrument);
             }
         });
+
+        this.props.onVolume((volume, id) => {
+            if (id === this.props.id) {
+                this.state.volume = volume;
+            }
+        })
     }
     componentDidMount() {
         this.envelopes = [];
@@ -107,7 +114,7 @@ export default class extends Component {
         }
         this.keysDown.add(n);
         this.unPlayNote(n);
-        var volume = 1;
+        var volume = this.state.volume;
         this.envelopes[n] = this.midiSounds.player.queueWaveTable(this.midiSounds.audioContext
             , this.midiSounds.equalizer.input
             , window[this.midiSounds.player.loader.instrumentInfo(this.state.selectedInstrument).variable]

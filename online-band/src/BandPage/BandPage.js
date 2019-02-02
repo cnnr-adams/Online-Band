@@ -39,12 +39,16 @@ export default class extends Component {
         this.props.backend.sendInstrument(instrument);
     }
 
+    onVolume = (volume) => {
+        this.props.backend.sendVolume(volume);
+    }
+
     getPianos() {
         let otherPianos = [];
         console.log(this.props.backend.users);
         this.props.backend.users.forEach((user, id) => {
 
-            otherPianos.push(<li key={id}><OtherPiano onNote={this.props.backend.onNote} id={id} onInstrument={this.props.backend.onInstrument} /></li>);
+            otherPianos.push(<li key={id}><OtherPiano onNote={this.props.backend.onNote} id={id} onInstrument={this.props.backend.onInstrument} onVolume={this.props.backend.onVolume} /></li>);
         });
         console.log(otherPianos);
         return <div style={STYLE.spacingContainer}>{otherPianos}</div>
@@ -53,7 +57,7 @@ export default class extends Component {
         return (
             <div style={STYLE.bandPage}>
                 <div style={STYLE.text}>Users connected: {this.state.length} at {this.state.lobbyId}</div>
-                <Piano onNote={this.onNote} onInstrument={this.onInstrument} />
+                <Piano onNote={this.onNote} onInstrument={this.onInstrument} onVolume={this.onVolume} />
                 {this.getPianos()}
             </div>
 
