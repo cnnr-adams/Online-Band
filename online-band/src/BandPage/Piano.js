@@ -173,7 +173,6 @@ export default class extends Component {
         this.setState({ status: event.port.manufacturer + ' ' + event.port.name + ' ' + event.port.state });
     }
     requestMIDIAccessSuccess(midi) {
-        console.log(midi);
         var inputs = midi.inputs.values();
         for (var input = inputs.next(); input && !input.done; input = inputs.next()) {
             input.value.onmidimessage = this.midiOnMIDImessage.bind(this);
@@ -195,49 +194,49 @@ export default class extends Component {
     keyboardDown(e) {
         switch (e.key) {
             case "a":
-                this.keyDown(0 + 12 * this.state.octave);
+                this.keyDown(0 + 12 * this.state.octave, e);
                 break;
             case "w":
-                this.keyDown(1 + 12 * this.state.octave);
+                this.keyDown(1 + 12 * this.state.octave, e);
                 break;
             case "s":
-                this.keyDown(2 + 12 * this.state.octave);
+                this.keyDown(2 + 12 * this.state.octave, e);
                 break;
             case "e":
-                this.keyDown(3 + 12 * this.state.octave);
+                this.keyDown(3 + 12 * this.state.octave, e);
                 break;
             case "d":
-                this.keyDown(4 + 12 * this.state.octave);
+                this.keyDown(4 + 12 * this.state.octave, e);
                 break;
             case "f":
-                this.keyDown(5 + 12 * this.state.octave);
+                this.keyDown(5 + 12 * this.state.octave, e);
                 break;
             case "t":
-                this.keyDown(6 + 12 * this.state.octave);
+                this.keyDown(6 + 12 * this.state.octave, e);
                 break;
             case "g":
-                this.keyDown(7 + 12 * this.state.octave);
+                this.keyDown(7 + 12 * this.state.octave, e);
                 break;
             case "y":
-                this.keyDown(8 + 12 * this.state.octave);
+                this.keyDown(8 + 12 * this.state.octave, e);
                 break;
             case "h":
-                this.keyDown(9 + 12 * this.state.octave);
+                this.keyDown(9 + 12 * this.state.octave, e);
                 break;
             case "u":
-                this.keyDown(10 + 12 * this.state.octave);
+                this.keyDown(10 + 12 * this.state.octave, e);
                 break;
             case "j":
-                this.keyDown(11 + 12 * this.state.octave);
+                this.keyDown(11 + 12 * this.state.octave, e);
                 break;
             case "k":
-                this.keyDown(12 + 12 * this.state.octave);
+                this.keyDown(12 + 12 * this.state.octave, e);
                 break;
             case "o":
-                this.keyDown(13 + 12 * this.state.octave);
+                this.keyDown(13 + 12 * this.state.octave, e);
                 break;
             case "l":
-                this.keyDown(14 + 12 * this.state.octave);
+                this.keyDown(14 + 12 * this.state.octave, e);
                 break;
         }
     }

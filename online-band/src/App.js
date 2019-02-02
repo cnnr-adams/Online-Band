@@ -4,6 +4,7 @@ import './App.css';
 import BandPage from './BandPage/BandPage';
 import HomePage from './HomePage/HomePage';
 import Backend from './interface';
+
 export default class App extends Component {
   constructor(props) {
     super(props);

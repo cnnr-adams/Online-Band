@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Piano from './Piano';
 import OtherPiano from './OtherPiano';
+import KeyboardEventHandler from 'react-keyboard-event-handler';
 
 const STYLE = {
     spacingContainer: {
@@ -55,8 +56,20 @@ export default class extends Component {
     }
     render() {
         return (
-            <div style={STYLE.bandPage} onBlur={(e) => { this.refs.piano.upAll() }} onKeyDown={(e) => { this.refs.piano.keyboardDown(e) }} onKeyUp={(e) => { this.refs.piano.keyboardUp(e) }} tabIndex="0">
+            <div style={STYLE.bandPage} onBlur={(e) => { this.refs.piano.upAll(); }} onKeyDown={(e) => { }} onKeyUp={(e) => { }}>
                 <div style={STYLE.text}>Users connected: {this.state.length} at {this.state.lobbyId}</div>
+                <KeyboardEventHandler
+                    handleFocusableElements={true}
+                    handleEventType="keyup"
+                    handleKeys={['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'w', 'e', 't', 'y', 'u', 'i', 'r', 'o', 'z', 'x']}
+                    onKeyEvent={(key, e) => this.refs.piano.keyboardUp(e)} >
+                </KeyboardEventHandler>
+                <KeyboardEventHandler
+                    handleFocusableElements={true}
+                    handleEventType="keydown"
+                    handleKeys={['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'w', 'e', 't', 'y', 'u', 'i', 'r', 'o', 'z', 'x']}
+                    onKeyEvent={(key, e) => this.refs.piano.keyboardDown(e)} >
+                </KeyboardEventHandler>
                 <Piano ref="piano" onNote={this.onNote} onInstrument={this.onInstrument} onVolume={this.onVolume} />
                 {this.getPianos()}
             </div>
