@@ -69,7 +69,22 @@ export default class extends Component {
                 console.log("new volume");
                 this.state.volume = volume;
             }
+        });
+        this.props.onLeaveUsers((userId) => {
+            if (userId === this.props.id) {
+                this.upAll();
+            }
         })
+    }
+    upAll() {
+        for (let i = 0; i < this.envelopes.length; i++) {
+            if (this.envelopes[i]) {
+                this.envelopes[i].cancel();
+                this.envelopes[i] = null;
+                this.props.onNote(false, i);
+                this.setState(this.state);
+            }
+        }
     }
     componentDidMount() {
         this.envelopes = [];

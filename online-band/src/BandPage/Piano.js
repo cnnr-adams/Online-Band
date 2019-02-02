@@ -49,7 +49,8 @@ export default class extends Component {
         this.state = {
             volume: 0.1,
             selectedInstrument: 192
-            , status: '?'
+            , status: '?',
+            octave: 3
         };
         this.keysDown = new Set();
     }
@@ -127,6 +128,16 @@ export default class extends Component {
             }
         }
     }
+    upAll() {
+        for (let i = 0; i < this.envelopes.length; i++) {
+            if (this.envelopes[i]) {
+                this.envelopes[i].cancel();
+                this.envelopes[i] = null;
+                this.props.onNote(false, i);
+                this.setState(this.state);
+            }
+        }
+    }
     pressed(n) {
         if (this.envelopes) {
             if (this.envelopes[n]) {
@@ -179,6 +190,110 @@ export default class extends Component {
             navigator.requestMIDIAccess().then(this.requestMIDIAccessSuccess.bind(this), this.requestMIDIAccessFailure.bind(this));
         } else {
             this.setState({ status: 'navigator.requestMIDIAccess undefined' });
+        }
+    }
+    keyboardDown(e) {
+        switch (e.key) {
+            case "a":
+                this.keyDown(0 + 12 * this.state.octave);
+                break;
+            case "w":
+                this.keyDown(1 + 12 * this.state.octave);
+                break;
+            case "s":
+                this.keyDown(2 + 12 * this.state.octave);
+                break;
+            case "e":
+                this.keyDown(3 + 12 * this.state.octave);
+                break;
+            case "d":
+                this.keyDown(4 + 12 * this.state.octave);
+                break;
+            case "f":
+                this.keyDown(5 + 12 * this.state.octave);
+                break;
+            case "t":
+                this.keyDown(6 + 12 * this.state.octave);
+                break;
+            case "g":
+                this.keyDown(7 + 12 * this.state.octave);
+                break;
+            case "y":
+                this.keyDown(8 + 12 * this.state.octave);
+                break;
+            case "h":
+                this.keyDown(9 + 12 * this.state.octave);
+                break;
+            case "u":
+                this.keyDown(10 + 12 * this.state.octave);
+                break;
+            case "j":
+                this.keyDown(11 + 12 * this.state.octave);
+                break;
+            case "k":
+                this.keyDown(12 + 12 * this.state.octave);
+                break;
+            case "o":
+                this.keyDown(13 + 12 * this.state.octave);
+                break;
+            case "l":
+                this.keyDown(14 + 12 * this.state.octave);
+                break;
+        }
+    }
+    keyboardUp(e) {
+        switch (e.key) {
+            case "x": this.state.octave++;
+                this.upAll();
+                break;
+            case "z": this.state.octave--;
+                this.upAll();
+                break;
+            case "a":
+                this.keyUp(0 + 12 * this.state.octave);
+                break;
+            case "w":
+                this.keyUp(1 + 12 * this.state.octave);
+                break;
+            case "s":
+                this.keyUp(2 + 12 * this.state.octave);
+                break;
+            case "e":
+                this.keyUp(3 + 12 * this.state.octave);
+                break;
+            case "d":
+                this.keyUp(4 + 12 * this.state.octave);
+                break;
+            case "f":
+                this.keyUp(5 + 12 * this.state.octave);
+                break;
+            case "t":
+                this.keyUp(6 + 12 * this.state.octave);
+                break;
+            case "g":
+                this.keyUp(7 + 12 * this.state.octave);
+                break;
+            case "y":
+                this.keyUp(8 + 12 * this.state.octave);
+                break;
+            case "h":
+                this.keyUp(9 + 12 * this.state.octave);
+                break;
+            case "u":
+                this.keyUp(10 + 12 * this.state.octave);
+                break;
+            case "j":
+                this.keyUp(11 + 12 * this.state.octave);
+                break;
+            case "k":
+                this.keyUp(12 + 12 * this.state.octave);
+                break;
+            case "o":
+                this.keyUp(13 + 12 * this.state.octave);
+                break;
+            case "l":
+                this.keyUp(14 + 12 * this.state.octave);
+                break;
         }
     }
     render() {
