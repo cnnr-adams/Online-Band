@@ -48,10 +48,30 @@ export default class extends Component {
             , status: '?'
         };
         this.keysDown = new Set();
+        this.props.onNote((isOn, note, id) => {
+            if (id === this.props.id) {
+                if (isOn) {
+                    this.playNote(note);
+                } else {
+                    this.unPlayNote(note);
+                }
+            }
+        });
+        this.props.onInstrument((instrument, id) => {
+            if (id === this.props.id) {
+                this.selectInstrument(instrument);
+            }
+        });
     }
     componentDidMount() {
         this.envelopes = [];
         this.startListening();
+    }
+    selectInstrument(n) {
+        this.setState({
+            selectedInstrument: n
+        });
+        this.midiSounds.cacheInstrument(n);
     }
     onSelectInstrument(e) {
         var list = e.target;
@@ -81,7 +101,29 @@ export default class extends Component {
         //     this.keyDown(n);
         // }
     }
+    playNote(n) {
+        if (this.envelopes[n]) {
+            return;
+        }
+        this.keysDown.add(n);
+        this.unPlayNote(n);
+        var volume = 1;
+        this.envelopes[n] = this.midiSounds.player.queueWaveTable(this.midiSounds.audioContext
+            , this.midiSounds.equalizer.input
+            , window[this.midiSounds.player.loader.instrumentInfo(this.state.selectedInstrument).variable]
+            , 0, n, 9999, volume);
+        this.setState(this.state);
+    }
 
+    unPlayNote(n) {
+        if (this.envelopes) {
+            if (this.envelopes[n]) {
+                this.envelopes[n].cancel();
+                this.envelopes[n] = null;
+                this.setState(this.state);
+            }
+        }
+    }
     keyDown(n, e, v) {
         if (e) {
             this.pauseEvent(e);
@@ -111,11 +153,11 @@ export default class extends Component {
         // }
     }
     pressed(n) {
-        // if (this.envelopes) {
-        //     if (this.envelopes[n]) {
-        //         return true;
-        //     }
-        // }
+        if (this.envelopes) {
+            if (this.envelopes[n]) {
+                return true;
+            }
+        }
         return false;
     }
     pauseEvent(e) {
@@ -167,8 +209,6 @@ export default class extends Component {
     render() {
         return (
             <div style={STYLE.piano}>
-                <p><select value={this.state.selectedInstrument} onChange={this.onSelectInstrument.bind(this)}>{this.createSelectItems()}</select></p>
-                <p>Status: {this.state.status}</p>
                 <table align="center">
                     <tbody>
                         <tr>

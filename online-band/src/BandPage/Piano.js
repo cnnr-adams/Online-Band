@@ -63,6 +63,7 @@ export default class extends Component {
         this.setState({
             selectedInstrument: n
         });
+        this.props.onInstrument(n);
         this.midiSounds.cacheInstrument(n);
     }
     createSelectItems() {
@@ -108,6 +109,8 @@ export default class extends Component {
         this.keyUp(n);
         var volume = this.state.volume;
 
+      
+        this.props.onNote(true, n);
         this.envelopes[n] = this.midiSounds.player.queueWaveTable(this.midiSounds.audioContext
             , this.midiSounds.equalizer.input
             , window[this.midiSounds.player.loader.instrumentInfo(this.state.selectedInstrument).variable]
@@ -119,6 +122,7 @@ export default class extends Component {
             if (this.envelopes[n]) {
                 this.envelopes[n].cancel();
                 this.envelopes[n] = null;
+                this.props.onNote(false, n);
                 this.setState(this.state);
             }
         }
@@ -181,7 +185,6 @@ export default class extends Component {
         return (
             <div style={STYLE.piano}>
                 <p><select value={this.state.selectedInstrument} onChange={this.onSelectInstrument.bind(this)}>{this.createSelectItems()}</select></p>
-                <p>Status: {this.state.status}</p>
                 <table align="center">
                     <tbody>
                         <tr>

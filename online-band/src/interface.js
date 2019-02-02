@@ -30,6 +30,24 @@ export default class Backend {
             callback(userId);
         });
     }
+    sendNote(isOn, note) {
+        this.socket.emit('note', isOn, note);
+    }
+
+    onNote = (callback) => {
+        this.socket.on('note', (isOn, note, id) => {
+            callback(isOn, note, id);
+        });
+    }
+
+    sendInstrument(instrument) {
+        this.socket.emit('instrument', instrument)
+    }
+    onInstrument = (callback) => {
+        this.socket.on('instrument', (instrument, id) => {
+            callback(instrument, id);
+        });
+    }
     host = () => {
         if (this.connected) {
             return;
