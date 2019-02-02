@@ -66,6 +66,7 @@ export default class extends Component {
 
         this.props.onVolume((volume, id) => {
             if (id === this.props.id) {
+                console.log("new volume");
                 this.state.volume = volume;
             }
         })

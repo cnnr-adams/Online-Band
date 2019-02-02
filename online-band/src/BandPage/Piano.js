@@ -269,7 +269,7 @@ export default class extends Component {
                 </table>
                 <div>
                     <div style={{ float: 'right', width: 80, height: 120, marginBottom: 160, marginRight: 0 }}>
-                        <Slider min={1} max={20} defaultValue={10} vertical={true} height='10' onChange={(volume) => { this.state.volume = (volume / 50) - .025 }} />
+                        <Slider min={1} max={20} defaultValue={10} vertical={true} height='10' onChange={(volume) => { this.state.volume = (volume / 50) - .025; this.props.onVolume(volume) }} />
                     </div>
                 </div>
                 {<div style={STYLE.hide} >
