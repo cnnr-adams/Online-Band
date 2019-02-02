@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import Slider, {Range} from 'rc-slider';
+import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import MIDISounds from 'midi-sounds-react';
 
@@ -47,7 +47,7 @@ export default class extends Component {
         super(props);
         this.midiNotes = [];
         this.state = {
-            volume: 0.1, 
+            volume: 0.1,
             selectedInstrument: 192
             , status: '?'
         };
@@ -109,7 +109,7 @@ export default class extends Component {
         this.keyUp(n);
         var volume = this.state.volume;
 
-      
+
         this.props.onNote(true, n);
         this.envelopes[n] = this.midiSounds.player.queueWaveTable(this.midiSounds.audioContext
             , this.midiSounds.equalizer.input
@@ -268,10 +268,10 @@ export default class extends Component {
 
                 </table>
                 <div>
-                <div style = { {float: 'right', width: 80, height: 120, marginBottom: 160, marginRight: 0 }}>
-      <Slider min={1} max={20} defaultValue={10} vertical='true' height='10' onChange={(volume)=>{this.state.volume=(volume/50) - .025}}/>
-    </div>
-  </div>
+                    <div style={{ float: 'right', width: 80, height: 120, marginBottom: 160, marginRight: 0 }}>
+                        <Slider min={1} max={20} defaultValue={10} vertical={true} height='10' onChange={(volume) => { this.state.volume = (volume / 50) - .025 }} />
+                    </div>
+                </div>
                 {<div style={STYLE.hide} >
                     <MIDISounds
                         ref={(ref) => (this.midiSounds = ref)}
