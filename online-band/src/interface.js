@@ -25,7 +25,7 @@ export default class Backend {
             callback(userData);
         });
     }
-    onLeaveUsers(callback) {
+    onLeaveUsers = (callback) => {
         this.socket.on('clientLeave', (userId) => {
             this.users.delete(userId);
             callback(userId);
