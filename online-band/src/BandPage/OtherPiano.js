@@ -113,14 +113,17 @@ export default class extends Component {
         if (this.envelopes[n]) {
             return;
         }
-        this.keysDown.add(n);
-        this.unPlayNote(n);
-        var volume = this.state.volume;
-        this.envelopes[n] = this.midiSounds.player.queueWaveTable(this.midiSounds.audioContext
-            , this.midiSounds.equalizer.input
-            , window[this.midiSounds.player.loader.instrumentInfo(this.state.selectedInstrument).variable]
-            , 0, n, 9999, volume);
-        this.setState(this.state);
+        if (window[this.midiSounds.player.loader.instrumentInfo(this.state.selectedInstrument).variable]) {
+            this.keysDown.add(n);
+            this.unPlayNote(n);
+            var volume = this.state.volume;
+            this.envelopes[n] = this.midiSounds.player.queueWaveTable(this.midiSounds.audioContext
+                , this.midiSounds.equalizer.input
+                , window[this.midiSounds.player.loader.instrumentInfo(this.state.selectedInstrument).variable]
+                , 0, n, 9999, volume);
+            this.setState(this.state);
+        }
+
     }
 
     unPlayNote(n) {
