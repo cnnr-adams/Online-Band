@@ -2,17 +2,14 @@ import React, { Component } from 'react';
 import Piano from './Piano';
 import OtherPiano from './OtherPiano';
 import KeyboardEventHandler from 'react-keyboard-event-handler';
-
+import "./Gradient.css";
 const STYLE = {
     spacingContainer: {
         display: 'flex',
         justifyContent: 'space-between'
     },
     bandPage: {
-        backgroundColor: '#00003b',
-        position: 'fixed',
-        height: '100%',
-        width: '100%'
+
     },
     text: {
         color: 'white'
@@ -56,18 +53,18 @@ export default class extends Component {
     }
     render() {
         return (
-            <div style={STYLE.bandPage} onBlur={(e) => { this.refs.piano.upAll(); }} onKeyDown={(e) => { }} onKeyUp={(e) => { }}>
+            <div className="grad" onBlur={(e) => { this.refs.piano.upAll(); }} onKeyDown={(e) => { }} onKeyUp={(e) => { }}>
                 <div style={STYLE.text}>Users connected: {this.state.length} at {this.state.lobbyId}</div>
                 <KeyboardEventHandler
                     handleFocusableElements={true}
                     handleEventType="keyup"
-                    handleKeys={['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'w', 'e', 't', 'y', 'u', 'i', 'r', 'o', 'z', 'x']}
+                    handleKeys={['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'w', 'e', 't', 'y', 'u', 'i', 'r', 'o', 'z', 'x', 'p']}
                     onKeyEvent={(key, e) => this.refs.piano.keyboardUp(e)} >
                 </KeyboardEventHandler>
                 <KeyboardEventHandler
                     handleFocusableElements={true}
                     handleEventType="keydown"
-                    handleKeys={['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'w', 'e', 't', 'y', 'u', 'i', 'r', 'o', 'z', 'x']}
+                    handleKeys={['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'w', 'e', 't', 'y', 'u', 'i', 'r', 'o', 'z', 'x', 'p']}
                     onKeyEvent={(key, e) => this.refs.piano.keyboardDown(e)} >
                 </KeyboardEventHandler>
                 <Piano ref="piano" onNote={this.onNote} onInstrument={this.onInstrument} onVolume={this.onVolume} />
