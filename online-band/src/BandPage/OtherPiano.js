@@ -94,7 +94,6 @@ export default class extends Component {
 
         this.props.onVolume((volume, id) => {
             if (id === this.props.id) {
-                console.log("new volume");
                 this.state.volume = volume;
             }
         });
@@ -241,7 +240,6 @@ export default class extends Component {
         this.setState({ status: event.port.manufacturer + ' ' + event.port.name + ' ' + event.port.state });
     }
     requestMIDIAccessSuccess(midi) {
-        console.log(midi);
         var inputs = midi.inputs.values();
         for (var input = inputs.next(); input && !input.done; input = inputs.next()) {
             input.value.onmidimessage = this.midiOnMIDImessage.bind(this);

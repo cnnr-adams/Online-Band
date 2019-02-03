@@ -111,7 +111,6 @@ export default class extends Component {
     onSelectKeyGuides(e) {
         var list = e.target;
         let guide = list.options[list.selectedIndex].getAttribute("value");
-        console.log(guide);
         this.setState({
             keyGuide: guide
         });
@@ -155,7 +154,6 @@ export default class extends Component {
                 <option key={21} value="B Major">B Major</option>,
                 <option key={22} value="B Minor">B Minor</option>];
         }
-        console.log(this.keyGuides);
         return this.keyGuides;
     }
     detectLeftButton(event) {
@@ -180,7 +178,6 @@ export default class extends Component {
     }
 
     keyDown(n, e, v) {
-        console.log(n);
         if (e) {
             this.pauseEvent(e);
         }
@@ -283,7 +280,6 @@ export default class extends Component {
             }
         }
         if (this.isKeyGuide(n)) {
-            console.log("key guided");
             return 1;
         }
         return 0;
