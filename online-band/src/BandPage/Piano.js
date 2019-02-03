@@ -87,8 +87,8 @@ export default class extends Component {
         super(props);
         this.midiNotes = [];
         this.state = {
-            volume: 0.1,
-            selectedInstrument: 192,
+            volume: this.props.defaultVolume,
+            selectedInstrument: this.props.defaultInstrument,
             keyGuide: "None"
             , status: '?',
             octave: 3
@@ -180,6 +180,7 @@ export default class extends Component {
     }
 
     keyDown(n, e, v) {
+        console.log(n);
         if (e) {
             this.pauseEvent(e);
         }
@@ -222,7 +223,6 @@ export default class extends Component {
     }
     isKeyGuide(key) {
         let keyVal = key % 12;
-        console.log(keyVal, this.state.keyGuide);
         switch (this.state.keyGuide) {
             case "C Major":
                 return keyVal === 0 || keyVal === 2 || keyVal === 4 || keyVal === 5 || keyVal === 7 || keyVal === 9 || keyVal === 11;
@@ -473,7 +473,7 @@ export default class extends Component {
                                 appElementName="root"
                                 instruments={[this.state.selectedInstrument]}
                             /></div>
-                        <Slider style={STYLE.pianoControls} min={1} max={30} defaultValue={15} height='10' onChange={(volume) => { this.state.volume = (volume / 50) - .025; this.props.onVolume(volume) }} />
+                        <Slider style={STYLE.pianoControls} min={1} max={30} defaultValue={15} height='10' onChange={(volume) => { this.state.volume = (volume / 50) - .025; this.props.onVolume(this.state.volume) }} />
                     </div>
                     <table style={STYLE.whiteKeys} align="center">
                         <tbody>

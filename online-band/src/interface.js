@@ -58,11 +58,11 @@ export default class Backend {
             callback(instrument, id);
         });
     }
-    host = (username) => {
+    host = (username, volume, instrument) => {
         if (this.connected) {
             return;
         }
-        this.socket.emit("host", username);
+        this.socket.emit("host", username, volume, instrument);
         this.socket.on("host", (error, lobbyId) => {
             if (error) {
                 this.handleError();
@@ -73,8 +73,8 @@ export default class Backend {
         });
     }
 
-    join = (lobbyId, username) => {
-        this.socket.emit("join", lobbyId, username);
+    join = (lobbyId, username, volume, instrument) => {
+        this.socket.emit("join", lobbyId, username, volume, instrument);
         this.socket.on("join", (error, cUsers) => {
             if (error) {
                 this.handleError();
@@ -99,6 +99,8 @@ class User {
         data = new Map(data);
         this.id = data.get("id");
         this.username = data.get("username");
+        this.volume = data.get("volume");
+        this.instrument = data.get("instrument");
     }
 }
 

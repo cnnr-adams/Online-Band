@@ -17,20 +17,20 @@ app.get('/', function (req, res) {
 
 io.on('connection', function (socket) {
 
-    socket.on('host', function (username) {
+    socket.on('host', function (username, volume, instrument) {
         if (sockets.has(socket.id)) {
             socket.emit('host', "Already in a server, leave it first!");
         } else {
             let roomNum = generateRoomNumber();
             let roomMap = new Map();
-            roomMap.set(socket.id, new User(socket, socket.id, username));
+            roomMap.set(socket.id, new User(socket, socket.id, username, volume, instrument));
             rooms.set(roomNum, roomMap);
             sockets.set(socket.id, roomNum);
             socket.emit('host', null, roomNum);
         }
     });
 
-    socket.on('join', function (roomId, username) {
+    socket.on('join', function (roomId, username, volume, instrument) {
         if (sockets.has(socket.id)) {
             socket.emit('join', "Already in a server, leave it first!");
         } else if (!rooms.has(roomId)) {
@@ -38,7 +38,7 @@ io.on('connection', function (socket) {
         } else {
             sockets.set(socket.id, roomId);
             let users = [];
-            let newUserData = new User(socket, socket.id, username);
+            let newUserData = new User(socket, socket.id, username, volume, instrument);
             rooms.get(roomId).forEach((user) => {
                 user.socket.emit('newUser', newUserData.getSendObject());
                 users.push(user.getSendObject());
@@ -69,6 +69,8 @@ io.on('connection', function (socket) {
             rooms.get(roomId).forEach((user, id) => {
                 if (id !== socket.id) {
                     user.socket.emit('instrument', instrumentInfo, socket.id);
+                } else {
+                    user.instrument = instrumentInfo;
                 }
             });
         }
@@ -81,7 +83,9 @@ io.on('connection', function (socket) {
             let roomId = sockets.get(socket.id);
             rooms.get(roomId).forEach((user, id) => {
                 if (id !== socket.id) {
-                    user.socket.emit('instrument', volume, socket.id);
+                    user.socket.emit('volume', volume, socket.id);
+                } else {
+                    user.volume = volume;
                 }
             });
         }
@@ -114,15 +118,19 @@ http.listen(3001, function () {
 })
 
 class User {
-    constructor(socket, id, username) {
+    constructor(socket, id, username, volume, instrument) {
         this.socket = socket;
         this.id = id;
         this.username = username;
+        this.volume = volume;
+        this.instrument = instrument;
     }
     getSendObject() {
         let sendObject = new Map();
         sendObject.set("id", this.id);
         sendObject.set("username", this.username);
+        sendObject.set("volume", this.volume);
+        sendObject.set("instrument", this.instrument);
         return sendObject;
     }
 }

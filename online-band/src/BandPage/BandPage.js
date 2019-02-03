@@ -46,7 +46,7 @@ export default class extends Component {
         console.log(this.props.backend.users);
         this.props.backend.users.forEach((user, id) => {
 
-            otherPianos.push(<li key={id}><OtherPiano username={user.username} onLeaveUsers={this.props.backend.onLeaveUsers} onNote={this.props.backend.onNote} id={id} onInstrument={this.props.backend.onInstrument} onVolume={this.props.backend.onVolume} /></li>);
+            otherPianos.push(<li key={id}><OtherPiano username={user.username} volume={user.volume} instrument={user.instrument} onLeaveUsers={this.props.backend.onLeaveUsers} onNote={this.props.backend.onNote} id={id} onInstrument={this.props.backend.onInstrument} onVolume={this.props.backend.onVolume} /></li>);
         });
         console.log(otherPianos);
         return <div style={STYLE.spacingContainer}>{otherPianos}</div>
@@ -67,7 +67,7 @@ export default class extends Component {
                     handleKeys={['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'w', 'e', 't', 'y', 'u', 'i', 'r', 'o', 'z', 'x', 'p']}
                     onKeyEvent={(key, e) => this.refs.piano.keyboardDown(e)} >
                 </KeyboardEventHandler>
-                <Piano ref="piano" onNote={this.onNote} onInstrument={this.onInstrument} onVolume={this.onVolume} />
+                <Piano ref="piano" defaultVolume={this.props.defaultVolume} defaultInstrument={this.props.defaultInstrument} onNote={this.onNote} onInstrument={this.onInstrument} onVolume={this.onVolume} />
                 {this.getPianos()}
             </div>
 

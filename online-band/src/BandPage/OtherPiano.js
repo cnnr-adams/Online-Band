@@ -72,8 +72,8 @@ export default class extends Component {
         super(props);
         this.midiNotes = [];
         this.state = {
-            volume: 10 / 50 - 0.025,
-            selectedInstrument: 192
+            volume: this.props.volume,
+            selectedInstrument: this.props.instrument
             , status: '?'
         };
         this.keysDown = new Set();
@@ -265,8 +265,8 @@ export default class extends Component {
             <div style={STYLE.piano}>
                 <div style={STYLE.innerPiano}>
                     <div style={STYLE.pianoControlsParent}>
-                        <h1>{this.props.username}</h1>
-                        <h1>{this.midiSounds && this.midiSounds.player.loader.instrumentInfo(this.state.selectedInstrument).title}</h1>
+                        <h1>Name: {this.props.username}</h1>
+                        <h1>Instrument: {this.midiSounds && this.midiSounds.player.loader.instrumentInfo(this.state.selectedInstrument).title}</h1>
                         {/* <select style={STYLE.pianoControls} value={this.state.selectedInstrument} onChange={this.onSelectInstrument.bind(this)}>{this.createSelectItems()}</select>
                         <Slider style={STYLE.pianoControls} min={1} max={20} defaultValue={15} height='10' onChange={(volume) => { this.state.volume = (volume / 50) - .025; this.props.onVolume(volume) }} /> */}
                     </div>

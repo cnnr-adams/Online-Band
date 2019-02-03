@@ -20,8 +20,8 @@ export default class HomePage extends Component {
                         this.setState({ roomId: event.target.value });
                     }} />
 
-                    <Button className="host" onClick={() => this.props.host(this.state.username)}>Host</Button>
-                    <Button className="join" onClick={() => this.props.join(this.state.roomId, this.state.username)}>Join</Button>
+                    <Button className="host" onClick={() => this.props.host(this.state.username, this.props.defaultVolume, this.props.defaultInstrument)}>Host</Button>
+                    <Button className="join" onClick={() => this.props.join(this.state.roomId, this.state.username, this.props.defaultVolume, this.props.defaultInstrument)}>Join</Button>
                 </div>
                 <div className="footer">
                     Connor, Caelan, Ryan, Dima

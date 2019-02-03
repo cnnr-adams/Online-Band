@@ -8,7 +8,7 @@ import Backend from './interface';
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { connected: false };
+    this.state = { connected: false, defaultVolume: 15 / 50 - 0.25, defaultInstrument: 1 };
     this.backend = new Backend(this.onConnect, this.onDisconnect);
   }
   componentDidMount() {
@@ -24,11 +24,11 @@ export default class App extends Component {
   render() {
     if (!this.state.connected) {
       return (
-        <HomePage host={this.backend.host} join={this.backend.join} />
+        <HomePage host={this.backend.host} join={this.backend.join} defaultVolume={this.state.defaultVolume} defaultInstrument={this.state.defaultInstrument} />
       )
     }
     return (
-      <BandPage lobbyId={this.state.lobbyId} backend={this.backend} />
+      <BandPage lobbyId={this.state.lobbyId} backend={this.backend} defaultVolume={this.state.defaultVolume} defaultInstrument={this.state.defaultInstrument} />
     );
   }
 }
