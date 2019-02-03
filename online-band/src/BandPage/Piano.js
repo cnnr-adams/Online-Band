@@ -10,7 +10,17 @@ const STYLE = {
         width: 0,
         height: 0
     },
+    innerPiano: {
+        margin: 'auto',
+        padding: '0.25em'
+    },
     piano: {
+        borderRadius: '1px',
+        margin: 'auto',
+        background: 'blue',
+        width: 'fit-content',
+        borderRadius: '10px',
+        alignContent: 'center'
     },
     keyWhite: {
         backgroundColor: '#ffffff'
@@ -106,17 +116,19 @@ export default class extends Component {
         if (this.envelopes[n]) {
             return;
         }
-        this.keysDown.add(n);
-        this.keyUp(n);
-        var volume = this.state.volume;
+        if (window[this.midiSounds.player.loader.instrumentInfo(this.state.selectedInstrument).variable]) {
+            this.keysDown.add(n);
+            this.keyUp(n);
+            var volume = this.state.volume;
 
 
-        this.props.onNote(true, n);
-        this.envelopes[n] = this.midiSounds.player.queueWaveTable(this.midiSounds.audioContext
-            , this.midiSounds.equalizer.input
-            , window[this.midiSounds.player.loader.instrumentInfo(this.state.selectedInstrument).variable]
-            , 0, n, 9999, volume);
-        this.setState(this.state);
+            this.props.onNote(true, n);
+            this.envelopes[n] = this.midiSounds.player.queueWaveTable(this.midiSounds.audioContext
+                , this.midiSounds.equalizer.input
+                , window[this.midiSounds.player.loader.instrumentInfo(this.state.selectedInstrument).variable]
+                , 0, n, 9999, volume);
+            this.setState(this.state);
+        }
     }
     keyUp(n) {
         if (this.envelopes) {
@@ -298,92 +310,93 @@ export default class extends Component {
     render() {
         return (
             <div style={STYLE.piano}>
-                <p><select value={this.state.selectedInstrument} onChange={this.onSelectInstrument.bind(this)}>{this.createSelectItems()}</select></p>
-                <table align="center">
-                    <tbody>
-                        <tr>
+                <div style={STYLE.innerPiano}>
+                    <p><select value={this.state.selectedInstrument} onChange={this.onSelectInstrument.bind(this)}>{this.createSelectItems()}</select></p>
 
-                            <td style={STYLE.keyMargin}></td>
+                    <table align="center">
+                        <tbody>
+                            <tr>
 
-                            <td style={(this.pressed(1 + 12 * 2)) ? STYLE.keyBlackPress : STYLE.keyBlack} disabled={true} onMouseOver={(e) => { this.keyOver(e, 1 + 12 * 2) }} onMouseDown={(e) => this.keyDown(1 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(1 + 12 * 2)} onMouseOut={(e) => this.keyUp(1 + 12 * 2)}></td>
-                            <td style={(this.pressed(3 + 12 * 2)) ? STYLE.keyBlackPress : STYLE.keyBlack} disabled={true} onMouseOver={(e) => { this.keyOver(e, 3 + 12 * 2) }} onMouseDown={(e) => this.keyDown(3 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(3 + 12 * 2)} onMouseOut={(e) => this.keyUp(3 + 12 * 2)}></td>
-                            <td style={STYLE.keyNo}></td>
-                            <td style={(this.pressed(6 + 12 * 2)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 6 + 12 * 2) }} onMouseDown={(e) => this.keyDown(6 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(6 + 12 * 2)} onMouseOut={(e) => this.keyUp(6 + 12 * 2)}></td>
-                            <td style={(this.pressed(8 + 12 * 2)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 8 + 12 * 2) }} onMouseDown={(e) => this.keyDown(8 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(8 + 12 * 2)} onMouseOut={(e) => this.keyUp(8 + 12 * 2)}></td>
-                            <td style={(this.pressed(10 + 12 * 2)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 10 + 12 * 2) }} onMouseDown={(e) => this.keyDown(10 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(10 + 12 * 2)} onMouseOut={(e) => this.keyUp(10 + 12 * 2)}></td>
-                            <td style={STYLE.keyNo}></td>
+                                <td style={STYLE.keyMargin}></td>
 
-                            <td style={(this.pressed(1 + 12 * 3)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 1 + 12 * 3) }} onMouseDown={(e) => this.keyDown(1 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(1 + 12 * 3)} onMouseOut={(e) => this.keyUp(1 + 12 * 3)}></td>
-                            <td style={(this.pressed(3 + 12 * 3)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 3 + 12 * 3) }} onMouseDown={(e) => this.keyDown(3 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(3 + 12 * 3)} onMouseOut={(e) => this.keyUp(3 + 12 * 3)}></td>
-                            <td style={STYLE.keyNo}></td>
-                            <td style={(this.pressed(6 + 12 * 3)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 6 + 12 * 3) }} onMouseDown={(e) => this.keyDown(6 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(6 + 12 * 3)} onMouseOut={(e) => this.keyUp(6 + 12 * 3)}></td>
-                            <td style={(this.pressed(8 + 12 * 3)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 8 + 12 * 3) }} onMouseDown={(e) => this.keyDown(8 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(8 + 12 * 3)} onMouseOut={(e) => this.keyUp(8 + 12 * 3)}></td>
-                            <td style={(this.pressed(10 + 12 * 3)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 10 + 12 * 3) }} onMouseDown={(e) => this.keyDown(10 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(10 + 12 * 3)} onMouseOut={(e) => this.keyUp(10 + 12 * 3)}></td>
-                            <td style={STYLE.keyNo}></td>
+                                <td style={(this.pressed(1 + 12 * 2)) ? STYLE.keyBlackPress : STYLE.keyBlack} disabled={true} onMouseOver={(e) => { this.keyOver(e, 1 + 12 * 2) }} onMouseDown={(e) => this.keyDown(1 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(1 + 12 * 2)} onMouseOut={(e) => this.keyUp(1 + 12 * 2)}></td>
+                                <td style={(this.pressed(3 + 12 * 2)) ? STYLE.keyBlackPress : STYLE.keyBlack} disabled={true} onMouseOver={(e) => { this.keyOver(e, 3 + 12 * 2) }} onMouseDown={(e) => this.keyDown(3 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(3 + 12 * 2)} onMouseOut={(e) => this.keyUp(3 + 12 * 2)}></td>
+                                <td style={STYLE.keyNo}></td>
+                                <td style={(this.pressed(6 + 12 * 2)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 6 + 12 * 2) }} onMouseDown={(e) => this.keyDown(6 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(6 + 12 * 2)} onMouseOut={(e) => this.keyUp(6 + 12 * 2)}></td>
+                                <td style={(this.pressed(8 + 12 * 2)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 8 + 12 * 2) }} onMouseDown={(e) => this.keyDown(8 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(8 + 12 * 2)} onMouseOut={(e) => this.keyUp(8 + 12 * 2)}></td>
+                                <td style={(this.pressed(10 + 12 * 2)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 10 + 12 * 2) }} onMouseDown={(e) => this.keyDown(10 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(10 + 12 * 2)} onMouseOut={(e) => this.keyUp(10 + 12 * 2)}></td>
+                                <td style={STYLE.keyNo}></td>
 
-                            <td style={(this.pressed(1 + 12 * 4)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 1 + 12 * 4) }} onMouseDown={(e) => this.keyDown(1 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(1 + 12 * 4)} onMouseOut={(e) => this.keyUp(1 + 12 * 4)}></td>
-                            <td style={(this.pressed(3 + 12 * 4)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 3 + 12 * 4) }} onMouseDown={(e) => this.keyDown(3 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(3 + 12 * 4)} onMouseOut={(e) => this.keyUp(3 + 12 * 4)}></td>
-                            <td style={STYLE.keyNo}></td>
-                            <td style={(this.pressed(6 + 12 * 4)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 6 + 12 * 4) }} onMouseDown={(e) => this.keyDown(6 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(6 + 12 * 4)} onMouseOut={(e) => this.keyUp(6 + 12 * 4)}></td>
-                            <td style={(this.pressed(8 + 12 * 4)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 8 + 12 * 4) }} onMouseDown={(e) => this.keyDown(8 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(8 + 12 * 4)} onMouseOut={(e) => this.keyUp(8 + 12 * 4)}></td>
-                            <td style={(this.pressed(10 + 12 * 4)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 10 + 12 * 4) }} onMouseDown={(e) => this.keyDown(10 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(10 + 12 * 4)} onMouseOut={(e) => this.keyUp(10 + 12 * 4)}></td>
-                            <td style={STYLE.keyNo}></td>
+                                <td style={(this.pressed(1 + 12 * 3)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 1 + 12 * 3) }} onMouseDown={(e) => this.keyDown(1 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(1 + 12 * 3)} onMouseOut={(e) => this.keyUp(1 + 12 * 3)}></td>
+                                <td style={(this.pressed(3 + 12 * 3)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 3 + 12 * 3) }} onMouseDown={(e) => this.keyDown(3 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(3 + 12 * 3)} onMouseOut={(e) => this.keyUp(3 + 12 * 3)}></td>
+                                <td style={STYLE.keyNo}></td>
+                                <td style={(this.pressed(6 + 12 * 3)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 6 + 12 * 3) }} onMouseDown={(e) => this.keyDown(6 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(6 + 12 * 3)} onMouseOut={(e) => this.keyUp(6 + 12 * 3)}></td>
+                                <td style={(this.pressed(8 + 12 * 3)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 8 + 12 * 3) }} onMouseDown={(e) => this.keyDown(8 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(8 + 12 * 3)} onMouseOut={(e) => this.keyUp(8 + 12 * 3)}></td>
+                                <td style={(this.pressed(10 + 12 * 3)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 10 + 12 * 3) }} onMouseDown={(e) => this.keyDown(10 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(10 + 12 * 3)} onMouseOut={(e) => this.keyUp(10 + 12 * 3)}></td>
+                                <td style={STYLE.keyNo}></td>
 
-                            <td style={(this.pressed(1 + 12 * 5)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 1 + 12 * 5) }} onMouseDown={(e) => this.keyDown(1 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(1 + 12 * 5)} onMouseOut={(e) => this.keyUp(1 + 12 * 5)}></td>
-                            <td style={(this.pressed(3 + 12 * 5)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 3 + 12 * 5) }} onMouseDown={(e) => this.keyDown(3 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(3 + 12 * 5)} onMouseOut={(e) => this.keyUp(3 + 12 * 5)}></td>
-                            <td style={STYLE.keyNo}></td>
-                            <td style={(this.pressed(6 + 12 * 5)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 6 + 12 * 5) }} onMouseDown={(e) => this.keyDown(6 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(6 + 12 * 5)} onMouseOut={(e) => this.keyUp(6 + 12 * 5)}></td>
-                            <td style={(this.pressed(8 + 12 * 5)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 8 + 12 * 5) }} onMouseDown={(e) => this.keyDown(8 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(8 + 12 * 5)} onMouseOut={(e) => this.keyUp(8 + 12 * 5)}></td>
-                            <td style={(this.pressed(10 + 12 * 5)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 10 + 12 * 5) }} onMouseDown={(e) => this.keyDown(10 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(10 + 12 * 5)} onMouseOut={(e) => this.keyUp(10 + 12 * 5)}></td>
-                            <td style={STYLE.keyNo}></td>
+                                <td style={(this.pressed(1 + 12 * 4)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 1 + 12 * 4) }} onMouseDown={(e) => this.keyDown(1 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(1 + 12 * 4)} onMouseOut={(e) => this.keyUp(1 + 12 * 4)}></td>
+                                <td style={(this.pressed(3 + 12 * 4)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 3 + 12 * 4) }} onMouseDown={(e) => this.keyDown(3 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(3 + 12 * 4)} onMouseOut={(e) => this.keyUp(3 + 12 * 4)}></td>
+                                <td style={STYLE.keyNo}></td>
+                                <td style={(this.pressed(6 + 12 * 4)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 6 + 12 * 4) }} onMouseDown={(e) => this.keyDown(6 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(6 + 12 * 4)} onMouseOut={(e) => this.keyUp(6 + 12 * 4)}></td>
+                                <td style={(this.pressed(8 + 12 * 4)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 8 + 12 * 4) }} onMouseDown={(e) => this.keyDown(8 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(8 + 12 * 4)} onMouseOut={(e) => this.keyUp(8 + 12 * 4)}></td>
+                                <td style={(this.pressed(10 + 12 * 4)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 10 + 12 * 4) }} onMouseDown={(e) => this.keyDown(10 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(10 + 12 * 4)} onMouseOut={(e) => this.keyUp(10 + 12 * 4)}></td>
+                                <td style={STYLE.keyNo}></td>
 
-                        </tr>
-                    </tbody>
-                </table>
-                <table align="center">
-                    <tbody>
-                        <tr>
-                            <td style={(this.pressed(0 + 12 * 2)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 0 + 12 * 2) }} onMouseDown={(e) => this.keyDown(0 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(0 + 12 * 2)} onMouseOut={(e) => this.keyUp(0 + 12 * 2)}></td>
-                            <td style={(this.pressed(2 + 12 * 2)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 2 + 12 * 2) }} onMouseDown={(e) => this.keyDown(2 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(2 + 12 * 2)} onMouseOut={(e) => this.keyUp(2 + 12 * 2)}></td>
-                            <td style={(this.pressed(4 + 12 * 2)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 4 + 12 * 2) }} onMouseDown={(e) => this.keyDown(4 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(4 + 12 * 2)} onMouseOut={(e) => this.keyUp(4 + 12 * 2)}></td>
-                            <td style={(this.pressed(5 + 12 * 2)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 5 + 12 * 2) }} onMouseDown={(e) => this.keyDown(5 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(5 + 12 * 2)} onMouseOut={(e) => this.keyUp(5 + 12 * 2)}></td>
-                            <td style={(this.pressed(7 + 12 * 2)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 7 + 12 * 2) }} onMouseDown={(e) => this.keyDown(7 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(7 + 12 * 2)} onMouseOut={(e) => this.keyUp(7 + 12 * 2)}></td>
-                            <td style={(this.pressed(9 + 12 * 2)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 9 + 12 * 2) }} onMouseDown={(e) => this.keyDown(9 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(9 + 12 * 2)} onMouseOut={(e) => this.keyUp(9 + 12 * 2)}></td>
-                            <td style={(this.pressed(11 + 12 * 2)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 11 + 12 * 2) }} onMouseDown={(e) => this.keyDown(11 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(11 + 12 * 2)} onMouseOut={(e) => this.keyUp(11 + 12 * 2)}></td>
+                                <td style={(this.pressed(1 + 12 * 5)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 1 + 12 * 5) }} onMouseDown={(e) => this.keyDown(1 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(1 + 12 * 5)} onMouseOut={(e) => this.keyUp(1 + 12 * 5)}></td>
+                                <td style={(this.pressed(3 + 12 * 5)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 3 + 12 * 5) }} onMouseDown={(e) => this.keyDown(3 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(3 + 12 * 5)} onMouseOut={(e) => this.keyUp(3 + 12 * 5)}></td>
+                                <td style={STYLE.keyNo}></td>
+                                <td style={(this.pressed(6 + 12 * 5)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 6 + 12 * 5) }} onMouseDown={(e) => this.keyDown(6 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(6 + 12 * 5)} onMouseOut={(e) => this.keyUp(6 + 12 * 5)}></td>
+                                <td style={(this.pressed(8 + 12 * 5)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 8 + 12 * 5) }} onMouseDown={(e) => this.keyDown(8 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(8 + 12 * 5)} onMouseOut={(e) => this.keyUp(8 + 12 * 5)}></td>
+                                <td style={(this.pressed(10 + 12 * 5)) ? STYLE.keyBlackPress : STYLE.keyBlack} onMouseOver={(e) => { this.keyOver(e, 10 + 12 * 5) }} onMouseDown={(e) => this.keyDown(10 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(10 + 12 * 5)} onMouseOut={(e) => this.keyUp(10 + 12 * 5)}></td>
+                                <td style={STYLE.keyNo}></td>
 
-                            <td style={(this.pressed(0 + 12 * 3)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 0 + 12 * 3) }} onMouseDown={(e) => this.keyDown(0 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(0 + 12 * 3)} onMouseOut={(e) => this.keyUp(0 + 12 * 3)}></td>
-                            <td style={(this.pressed(2 + 12 * 3)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 2 + 12 * 3) }} onMouseDown={(e) => this.keyDown(2 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(2 + 12 * 3)} onMouseOut={(e) => this.keyUp(2 + 12 * 3)}></td>
-                            <td style={(this.pressed(4 + 12 * 3)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 4 + 12 * 3) }} onMouseDown={(e) => this.keyDown(4 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(4 + 12 * 3)} onMouseOut={(e) => this.keyUp(4 + 12 * 3)}></td>
-                            <td style={(this.pressed(5 + 12 * 3)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 5 + 12 * 3) }} onMouseDown={(e) => this.keyDown(5 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(5 + 12 * 3)} onMouseOut={(e) => this.keyUp(5 + 12 * 3)}></td>
-                            <td style={(this.pressed(7 + 12 * 3)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 7 + 12 * 3) }} onMouseDown={(e) => this.keyDown(7 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(7 + 12 * 3)} onMouseOut={(e) => this.keyUp(7 + 12 * 3)}></td>
-                            <td style={(this.pressed(9 + 12 * 3)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 9 + 12 * 3) }} onMouseDown={(e) => this.keyDown(9 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(9 + 12 * 3)} onMouseOut={(e) => this.keyUp(9 + 12 * 3)}></td>
-                            <td style={(this.pressed(11 + 12 * 3)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 11 + 12 * 3) }} onMouseDown={(e) => this.keyDown(11 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(11 + 12 * 3)} onMouseOut={(e) => this.keyUp(11 + 12 * 3)}></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table align="center">
+                        <tbody>
+                            <tr>
+                                <td style={(this.pressed(0 + 12 * 2)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 0 + 12 * 2) }} onMouseDown={(e) => this.keyDown(0 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(0 + 12 * 2)} onMouseOut={(e) => this.keyUp(0 + 12 * 2)}></td>
+                                <td style={(this.pressed(2 + 12 * 2)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 2 + 12 * 2) }} onMouseDown={(e) => this.keyDown(2 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(2 + 12 * 2)} onMouseOut={(e) => this.keyUp(2 + 12 * 2)}></td>
+                                <td style={(this.pressed(4 + 12 * 2)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 4 + 12 * 2) }} onMouseDown={(e) => this.keyDown(4 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(4 + 12 * 2)} onMouseOut={(e) => this.keyUp(4 + 12 * 2)}></td>
+                                <td style={(this.pressed(5 + 12 * 2)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 5 + 12 * 2) }} onMouseDown={(e) => this.keyDown(5 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(5 + 12 * 2)} onMouseOut={(e) => this.keyUp(5 + 12 * 2)}></td>
+                                <td style={(this.pressed(7 + 12 * 2)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 7 + 12 * 2) }} onMouseDown={(e) => this.keyDown(7 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(7 + 12 * 2)} onMouseOut={(e) => this.keyUp(7 + 12 * 2)}></td>
+                                <td style={(this.pressed(9 + 12 * 2)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 9 + 12 * 2) }} onMouseDown={(e) => this.keyDown(9 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(9 + 12 * 2)} onMouseOut={(e) => this.keyUp(9 + 12 * 2)}></td>
+                                <td style={(this.pressed(11 + 12 * 2)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 11 + 12 * 2) }} onMouseDown={(e) => this.keyDown(11 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(11 + 12 * 2)} onMouseOut={(e) => this.keyUp(11 + 12 * 2)}></td>
 
-                            <td style={(this.pressed(0 + 12 * 4)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 0 + 12 * 4) }} onMouseDown={(e) => this.keyDown(0 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(0 + 12 * 4)} onMouseOut={(e) => this.keyUp(0 + 12 * 4)}></td>
-                            <td style={(this.pressed(2 + 12 * 4)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 2 + 12 * 4) }} onMouseDown={(e) => this.keyDown(2 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(2 + 12 * 4)} onMouseOut={(e) => this.keyUp(2 + 12 * 4)}></td>
-                            <td style={(this.pressed(4 + 12 * 4)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 4 + 12 * 4) }} onMouseDown={(e) => this.keyDown(4 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(4 + 12 * 4)} onMouseOut={(e) => this.keyUp(4 + 12 * 4)}></td>
-                            <td style={(this.pressed(5 + 12 * 4)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 5 + 12 * 4) }} onMouseDown={(e) => this.keyDown(5 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(5 + 12 * 4)} onMouseOut={(e) => this.keyUp(5 + 12 * 4)}></td>
-                            <td style={(this.pressed(7 + 12 * 4)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 7 + 12 * 4) }} onMouseDown={(e) => this.keyDown(7 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(7 + 12 * 4)} onMouseOut={(e) => this.keyUp(7 + 12 * 4)}></td>
-                            <td style={(this.pressed(9 + 12 * 4)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 9 + 12 * 4) }} onMouseDown={(e) => this.keyDown(9 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(9 + 12 * 4)} onMouseOut={(e) => this.keyUp(9 + 12 * 4)}></td>
-                            <td style={(this.pressed(11 + 12 * 4)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 11 + 12 * 4) }} onMouseDown={(e) => this.keyDown(11 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(11 + 12 * 4)} onMouseOut={(e) => this.keyUp(11 + 12 * 4)}></td>
+                                <td style={(this.pressed(0 + 12 * 3)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 0 + 12 * 3) }} onMouseDown={(e) => this.keyDown(0 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(0 + 12 * 3)} onMouseOut={(e) => this.keyUp(0 + 12 * 3)}></td>
+                                <td style={(this.pressed(2 + 12 * 3)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 2 + 12 * 3) }} onMouseDown={(e) => this.keyDown(2 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(2 + 12 * 3)} onMouseOut={(e) => this.keyUp(2 + 12 * 3)}></td>
+                                <td style={(this.pressed(4 + 12 * 3)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 4 + 12 * 3) }} onMouseDown={(e) => this.keyDown(4 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(4 + 12 * 3)} onMouseOut={(e) => this.keyUp(4 + 12 * 3)}></td>
+                                <td style={(this.pressed(5 + 12 * 3)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 5 + 12 * 3) }} onMouseDown={(e) => this.keyDown(5 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(5 + 12 * 3)} onMouseOut={(e) => this.keyUp(5 + 12 * 3)}></td>
+                                <td style={(this.pressed(7 + 12 * 3)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 7 + 12 * 3) }} onMouseDown={(e) => this.keyDown(7 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(7 + 12 * 3)} onMouseOut={(e) => this.keyUp(7 + 12 * 3)}></td>
+                                <td style={(this.pressed(9 + 12 * 3)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 9 + 12 * 3) }} onMouseDown={(e) => this.keyDown(9 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(9 + 12 * 3)} onMouseOut={(e) => this.keyUp(9 + 12 * 3)}></td>
+                                <td style={(this.pressed(11 + 12 * 3)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 11 + 12 * 3) }} onMouseDown={(e) => this.keyDown(11 + 12 * 3, e)} onMouseUp={(e) => this.keyUp(11 + 12 * 3)} onMouseOut={(e) => this.keyUp(11 + 12 * 3)}></td>
 
-                            <td style={(this.pressed(0 + 12 * 5)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 0 + 12 * 5) }} onMouseDown={(e) => this.keyDown(0 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(0 + 12 * 5)} onMouseOut={(e) => this.keyUp(0 + 12 * 5)}></td>
-                            <td style={(this.pressed(2 + 12 * 5)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 2 + 12 * 5) }} onMouseDown={(e) => this.keyDown(2 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(2 + 12 * 5)} onMouseOut={(e) => this.keyUp(2 + 12 * 5)}></td>
-                            <td style={(this.pressed(4 + 12 * 5)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 4 + 12 * 5) }} onMouseDown={(e) => this.keyDown(4 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(4 + 12 * 5)} onMouseOut={(e) => this.keyUp(4 + 12 * 5)}></td>
-                            <td style={(this.pressed(5 + 12 * 5)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 5 + 12 * 5) }} onMouseDown={(e) => this.keyDown(5 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(5 + 12 * 5)} onMouseOut={(e) => this.keyUp(5 + 12 * 5)}></td>
-                            <td style={(this.pressed(7 + 12 * 5)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 7 + 12 * 5) }} onMouseDown={(e) => this.keyDown(7 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(7 + 12 * 5)} onMouseOut={(e) => this.keyUp(7 + 12 * 5)}></td>
-                            <td style={(this.pressed(9 + 12 * 5)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 9 + 12 * 5) }} onMouseDown={(e) => this.keyDown(9 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(9 + 12 * 5)} onMouseOut={(e) => this.keyUp(9 + 12 * 5)}></td>
-                            <td style={(this.pressed(11 + 12 * 5)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 11 + 12 * 5) }} onMouseDown={(e) => this.keyDown(11 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(11 + 12 * 5)} onMouseOut={(e) => this.keyUp(11 + 12 * 5)}></td>
+                                <td style={(this.pressed(0 + 12 * 4)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 0 + 12 * 4) }} onMouseDown={(e) => this.keyDown(0 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(0 + 12 * 4)} onMouseOut={(e) => this.keyUp(0 + 12 * 4)}></td>
+                                <td style={(this.pressed(2 + 12 * 4)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 2 + 12 * 4) }} onMouseDown={(e) => this.keyDown(2 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(2 + 12 * 4)} onMouseOut={(e) => this.keyUp(2 + 12 * 4)}></td>
+                                <td style={(this.pressed(4 + 12 * 4)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 4 + 12 * 4) }} onMouseDown={(e) => this.keyDown(4 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(4 + 12 * 4)} onMouseOut={(e) => this.keyUp(4 + 12 * 4)}></td>
+                                <td style={(this.pressed(5 + 12 * 4)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 5 + 12 * 4) }} onMouseDown={(e) => this.keyDown(5 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(5 + 12 * 4)} onMouseOut={(e) => this.keyUp(5 + 12 * 4)}></td>
+                                <td style={(this.pressed(7 + 12 * 4)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 7 + 12 * 4) }} onMouseDown={(e) => this.keyDown(7 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(7 + 12 * 4)} onMouseOut={(e) => this.keyUp(7 + 12 * 4)}></td>
+                                <td style={(this.pressed(9 + 12 * 4)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 9 + 12 * 4) }} onMouseDown={(e) => this.keyDown(9 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(9 + 12 * 4)} onMouseOut={(e) => this.keyUp(9 + 12 * 4)}></td>
+                                <td style={(this.pressed(11 + 12 * 4)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 11 + 12 * 4) }} onMouseDown={(e) => this.keyDown(11 + 12 * 4, e)} onMouseUp={(e) => this.keyUp(11 + 12 * 4)} onMouseOut={(e) => this.keyUp(11 + 12 * 4)}></td>
 
-                            <td style={STYLE.keyMargin}></td>
+                                <td style={(this.pressed(0 + 12 * 5)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 0 + 12 * 5) }} onMouseDown={(e) => this.keyDown(0 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(0 + 12 * 5)} onMouseOut={(e) => this.keyUp(0 + 12 * 5)}></td>
+                                <td style={(this.pressed(2 + 12 * 5)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 2 + 12 * 5) }} onMouseDown={(e) => this.keyDown(2 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(2 + 12 * 5)} onMouseOut={(e) => this.keyUp(2 + 12 * 5)}></td>
+                                <td style={(this.pressed(4 + 12 * 5)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 4 + 12 * 5) }} onMouseDown={(e) => this.keyDown(4 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(4 + 12 * 5)} onMouseOut={(e) => this.keyUp(4 + 12 * 5)}></td>
+                                <td style={(this.pressed(5 + 12 * 5)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 5 + 12 * 5) }} onMouseDown={(e) => this.keyDown(5 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(5 + 12 * 5)} onMouseOut={(e) => this.keyUp(5 + 12 * 5)}></td>
+                                <td style={(this.pressed(7 + 12 * 5)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 7 + 12 * 5) }} onMouseDown={(e) => this.keyDown(7 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(7 + 12 * 5)} onMouseOut={(e) => this.keyUp(7 + 12 * 5)}></td>
+                                <td style={(this.pressed(9 + 12 * 5)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 9 + 12 * 5) }} onMouseDown={(e) => this.keyDown(9 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(9 + 12 * 5)} onMouseOut={(e) => this.keyUp(9 + 12 * 5)}></td>
+                                <td style={(this.pressed(11 + 12 * 5)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 11 + 12 * 5) }} onMouseDown={(e) => this.keyDown(11 + 12 * 5, e)} onMouseUp={(e) => this.keyUp(11 + 12 * 5)} onMouseOut={(e) => this.keyUp(11 + 12 * 5)}></td>
 
-                        </tr>
-                    </tbody>
+                            </tr>
+                        </tbody>
 
-                </table>
+                    </table>
+                </div>
                 <div>
                     <div style={{ float: 'right', width: 80, height: 120, marginBottom: 160, marginRight: 0 }}>
-                        <Slider min={1} max={20} defaultValue={10} vertical={true} height='10' onChange={(volume) => { this.state.volume = (volume / 50) - .025; this.props.onVolume(volume) }} />
+                        <Slider min={1} max={20} defaultValue={10} height='10' onChange={(volume) => { this.state.volume = (volume / 50) - .025; this.props.onVolume(volume) }} />
                     </div>
                 </div>
                 {<div style={STYLE.hide} >

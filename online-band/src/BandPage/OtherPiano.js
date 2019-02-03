@@ -7,8 +7,6 @@ const STYLE = {
         width: 0,
         height: 0
     },
-    piano: {
-    },
     keyWhite: {
         backgroundColor: '#ffffff'
         , width: '0.5cm'
