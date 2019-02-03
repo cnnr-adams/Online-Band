@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import MIDISounds from 'midi-sounds-react';
+import MIDISounds from '../midi-sounds-react/src/midisoundsreact';
 
 const STYLE = {
     hide: {
@@ -415,7 +415,7 @@ export default class extends Component {
                     </table>
                 </div>
                 {
-                    <div style={STYLE.hide}>
+                    <div>
                         <MIDISounds
                             ref={(ref) => (this.midiSounds = ref)}
                             appElementName="root"

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MIDISounds from 'midi-sounds-react';
+import MIDISounds from '../midi-sounds-react/src/midisoundsreact';
 
 const STYLE = {
     hide: {
