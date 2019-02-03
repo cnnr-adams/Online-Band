@@ -337,7 +337,7 @@ export default class extends Component {
                                 appElementName="root"
                                 instruments={[this.state.selectedInstrument]}
                             /></div>
-                        <Slider style={STYLE.pianoControls} min={1} max={20} defaultValue={15} height='10' onChange={(volume) => { this.state.volume = (volume / 50) - .025; this.props.onVolume(volume) }} />
+                        <Slider style={STYLE.pianoControls} min={1} max={30} defaultValue={15} height='10' onChange={(volume) => { this.state.volume = (volume / 50) - .025; this.props.onVolume(volume) }} />
                     </div>
                     <table style={STYLE.whiteKeys} align="center">
                         <tbody>

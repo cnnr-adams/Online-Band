@@ -94,7 +94,7 @@ class MIDISounds extends React.Component {
     var r = (
       <div className="MIDISounds">
         <div style={{ width: '32px' }} onClick={this.handleOpenModal}>
-          <img src="dial.png" alt="Options" height="32" width="32"></img>
+          <img src={require("./dial.png")} alt="Options" height="32" width="32"></img>
         </div>
         <ReactModal isOpen={this.state.showModal} contentLabel="MIDISounds options" shouldCloseOnOverlayClick={true} onRequestClose={this.handleCloseModal}>
           <div style={STYLE.MIDISoundsInfo}>
