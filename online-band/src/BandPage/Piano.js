@@ -331,6 +331,12 @@ export default class extends Component {
                 <div style={STYLE.innerPiano}>
                     <div style={STYLE.pianoControlsParent}>
                         <select style={STYLE.pianoControls} value={this.state.selectedInstrument} onChange={this.onSelectInstrument.bind(this)}>{this.createSelectItems()}</select>
+                        <div style={STYLE.pianoControls}>
+                            <MIDISounds
+                                ref={(ref) => (this.midiSounds = ref)}
+                                appElementName="root"
+                                instruments={[this.state.selectedInstrument]}
+                            /></div>
                         <Slider style={STYLE.pianoControls} min={1} max={20} defaultValue={15} height='10' onChange={(volume) => { this.state.volume = (volume / 50) - .025; this.props.onVolume(volume) }} />
                     </div>
                     <table style={STYLE.whiteKeys} align="center">
@@ -414,14 +420,6 @@ export default class extends Component {
 
                     </table>
                 </div>
-                {
-                    <div>
-                        <MIDISounds
-                            ref={(ref) => (this.midiSounds = ref)}
-                            appElementName="root"
-                            instruments={[this.state.selectedInstrument]}
-                        /></div>
-                }
             </div >
         );
     }
