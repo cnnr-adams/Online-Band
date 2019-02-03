@@ -12,43 +12,61 @@ const STYLE = {
     },
     innerPiano: {
         margin: 'auto',
-        padding: '0.25em'
+        padding: '0.25em',
+    },
+    pianoControlsParent: {
+        display: 'flex',
+        flexDirection: 'row'
+    },
+    pianoControls: {
+        margin: '0.5em'
     },
     piano: {
-        borderRadius: '1px',
         margin: 'auto',
-        background: 'blue',
-        width: 'fit-content',
+        background: 'linear-gradient(to top, #8c8c8c 95%, #595959 100%)',
+        display: 'table',
+        width: '-moz-fit-content',
         borderRadius: '10px',
         alignContent: 'center'
     },
+    whiteKeys: {
+        position: 'relative',
+        top: '1.3cm',
+        marginTop: '-1.3cm'
+    },
+    blackKeys: {
+    },
     keyWhite: {
-        backgroundColor: '#ffffff'
-        , width: '0.5cm'
-        , height: '1cm'
-    }
-    , keyWhitePress: {
-        backgroundColor: '#ffaaaa'
-        , width: '0.5cm'
-        , height: '1cm'
-    }
-    , keyBlack: {
-        backgroundColor: '#444444'
-        , width: '0.5cm'
-        , height: '1cm'
-    }
-    , keyBlackPress: {
-        backgroundColor: '#990000'
-        , width: '0.5cm'
-        , height: '0.5cm'
-    }
-    , keyNo: {
-        width: '0.5cm'
-        , height: '0.5cm'
-    }
-    , keyMargin: {
-        width: '0.25cm'
-        , height: '0.5cm'
+        backgroundColor: '#ffffff',
+        width: '0.5cm',
+        height: '2cm',
+        borderRadius: '3px'
+    },
+    keyWhitePress: {
+        background: 'linear-gradient(to bottom, #ffffff 25%, #757575 100%)',
+        width: '0.5cm',
+        height: '2cm',
+        borderRadius: '3px'
+    },
+    keyBlack: {
+        backgroundColor: '#333333',
+        width: '0.5cm',
+        height: '1.15cm',
+        borderRadius: '3px'
+    },
+    keyBlackPress: {
+        background: 'linear-gradient(to bottom, #333333 25%, #000000 100%)',
+        width: '0.5cm',
+        height: '1.15cm',
+        borderRadius: '3px'
+    },
+    keyNo: {
+        width: '0.5cm',
+        height: '0.5cm'
+    },
+    keyMargin: {
+        width: '0.25cm',
+        height: '0.5cm'
     }
 };
 
@@ -311,9 +329,11 @@ export default class extends Component {
         return (
             <div style={STYLE.piano}>
                 <div style={STYLE.innerPiano}>
-                    <p><select value={this.state.selectedInstrument} onChange={this.onSelectInstrument.bind(this)}>{this.createSelectItems()}</select></p>
-
-                    <table align="center">
+                    <div style={STYLE.pianoControlsParent}>
+                        <select style={STYLE.pianoControls} value={this.state.selectedInstrument} onChange={this.onSelectInstrument.bind(this)}>{this.createSelectItems()}</select>
+                        <Slider style={STYLE.pianoControls} min={1} max={20} defaultValue={15} height='10' onChange={(volume) => { this.state.volume = (volume / 50) - .025; this.props.onVolume(volume) }} />
+                    </div>
+                    <table style={STYLE.whiteKeys} align="center">
                         <tbody>
                             <tr>
 
@@ -354,7 +374,7 @@ export default class extends Component {
                             </tr>
                         </tbody>
                     </table>
-                    <table align="center">
+                    <table style={STYLE.blackKeys} align="center">
                         <tbody>
                             <tr>
                                 <td style={(this.pressed(0 + 12 * 2)) ? STYLE.keyWhitePress : STYLE.keyWhite} onMouseOver={(e) => { this.keyOver(e, 0 + 12 * 2) }} onMouseDown={(e) => this.keyDown(0 + 12 * 2, e)} onMouseUp={(e) => this.keyUp(0 + 12 * 2)} onMouseOut={(e) => this.keyUp(0 + 12 * 2)}></td>
@@ -394,18 +414,15 @@ export default class extends Component {
 
                     </table>
                 </div>
-                <div>
-                    <div style={{ float: 'right', width: 80, height: 120, marginBottom: 160, marginRight: 0 }}>
-                        <Slider min={1} max={20} defaultValue={10} height='10' onChange={(volume) => { this.state.volume = (volume / 50) - .025; this.props.onVolume(volume) }} />
-                    </div>
-                </div>
-                {<div style={STYLE.hide} >
-                    <MIDISounds
-                        ref={(ref) => (this.midiSounds = ref)}
-                        appElementName="root"
-                        instruments={[this.state.selectedInstrument]}
-                    /></div>}
-            </div>
+                {
+                    <div style={STYLE.hide}>
+                        <MIDISounds
+                            ref={(ref) => (this.midiSounds = ref)}
+                            appElementName="root"
+                            instruments={[this.state.selectedInstrument]}
+                        /></div>
+                }
+            </div >
         );
     }
 }
