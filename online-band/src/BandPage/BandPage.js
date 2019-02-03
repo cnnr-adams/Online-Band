@@ -49,7 +49,7 @@ export default class extends Component {
         console.log(this.props.backend.users);
         this.props.backend.users.forEach((user, id) => {
 
-            otherPianos.push(<li key={id}><OtherPiano onLeaveUsers={this.props.backend.onLeaveUsers} onNote={this.props.backend.onNote} id={id} onInstrument={this.props.backend.onInstrument} onVolume={this.props.backend.onVolume} /></li>);
+            otherPianos.push(<li key={id}><OtherPiano username={user.username} onLeaveUsers={this.props.backend.onLeaveUsers} onNote={this.props.backend.onNote} id={id} onInstrument={this.props.backend.onInstrument} onVolume={this.props.backend.onVolume} /></li>);
         });
         console.log(otherPianos);
         return <div style={STYLE.spacingContainer}>{otherPianos}</div>

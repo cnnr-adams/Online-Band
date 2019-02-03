@@ -17,20 +17,20 @@ app.get('/', function (req, res) {
 
 io.on('connection', function (socket) {
 
-    socket.on('host', function () {
+    socket.on('host', function (username) {
         if (sockets.has(socket.id)) {
             socket.emit('host', "Already in a server, leave it first!");
         } else {
             let roomNum = generateRoomNumber();
             let roomMap = new Map();
-            roomMap.set(socket.id, new User(socket, socket.id));
+            roomMap.set(socket.id, new User(socket, socket.id, username));
             rooms.set(roomNum, roomMap);
             sockets.set(socket.id, roomNum);
             socket.emit('host', null, roomNum);
         }
     });
 
-    socket.on('join', function (roomId) {
+    socket.on('join', function (roomId, username) {
         if (sockets.has(socket.id)) {
             socket.emit('join', "Already in a server, leave it first!");
         } else if (!rooms.has(roomId)) {
@@ -38,7 +38,7 @@ io.on('connection', function (socket) {
         } else {
             sockets.set(socket.id, roomId);
             let users = [];
-            let newUserData = new User(socket, socket.id);
+            let newUserData = new User(socket, socket.id, username);
             rooms.get(roomId).forEach((user) => {
                 user.socket.emit('newUser', newUserData.getSendObject());
                 users.push(user.getSendObject());
@@ -114,13 +114,15 @@ http.listen(3001, function () {
 })
 
 class User {
-    constructor(socket, id) {
+    constructor(socket, id, username) {
         this.socket = socket;
         this.id = id;
+        this.username = username;
     }
     getSendObject() {
         let sendObject = new Map();
         sendObject.set("id", this.id);
+        sendObject.set("username", this.username);
         return sendObject;
     }
 }
